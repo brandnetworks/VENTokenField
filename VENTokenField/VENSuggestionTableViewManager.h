@@ -23,6 +23,7 @@
 @property (assign, nonatomic) id<VENSuggestionTableViewManagerDelegate> delegate;
 
 - (instancetype)initWithTokenField:(VENTokenField *)tokenField;
+- (void) registerCellNibForSuggestionsTableView:(UINib *)nib;
 
 - (void)displayTableView;
 - (void)hideTableView;

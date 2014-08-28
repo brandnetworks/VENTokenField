@@ -185,6 +185,11 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     }
 }
 
+- (void) registerCellNibForSuggestionsTableView:(UINib *)nib;
+{
+    [self.tableViewManager registerCellNibForSuggestionsTableView:nib];
+}
+
 - (void)setSuggestionDataSource:(id<VENTokenSuggestionDataSource>)suggestionDataSource
 {
     _suggestionDataSource = suggestionDataSource;

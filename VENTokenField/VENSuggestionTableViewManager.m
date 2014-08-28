@@ -9,6 +9,8 @@
 #import "VENSuggestionTableViewManager.h"
 #import "VENTokenField.h"
 
+static NSString *VENSuggestionTableViewCellReuseIdentifier = @"VENSuggestionTableViewCellReuseIdentifier";
+
 @interface VENSuggestionTableViewManager ()
 
 @property (nonatomic, strong) NSArray *options;
@@ -26,6 +28,12 @@
     return self;
 }
 
+- (void) registerCellNibForSuggestionsTableView:(UINib *)nib;
+{
+    [self.tableView registerNib:nib
+         forCellReuseIdentifier:VENSuggestionTableViewCellReuseIdentifier];
+}
+
 - (NSString *)valueForIndexPath:(NSIndexPath *)indexPath
 {
     return [self.dataSource tokenField:self.tokenField suggestionTitleForPartialText:self.tokenField.inputText atIndex:indexPath.row];
@@ -41,15 +49,34 @@
     return [self.dataSource tokenField:self.tokenField numberOfSuggestionsForPartialText:self.tokenField.inputText];
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([self.dataSource respondsToSelector:@selector(tokenField:heightForCellAtIndex:)])
+    {
+        return [self.dataSource tokenField:self.tokenField heightForCellAtIndex:indexPath.row];
+    }
+    else
+    {
+        return 44.0f;
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"suggestionCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:VENSuggestionTableViewCellReuseIdentifier];
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"suggestionCell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:VENSuggestionTableViewCellReuseIdentifier];
     }
     
-    cell.textLabel.text = [self valueForIndexPath:indexPath];
+    if ([self.dataSource respondsToSelector:@selector(tokenField:willShowCell:forIndex:)])
+    {
+        [self.dataSource tokenField:self.tokenField willShowCell:cell forIndex:indexPath.row];
+    }
+    else
+    {
+        cell.textLabel.text = [self valueForIndexPath:indexPath];
+    }
     
     return cell;
 }

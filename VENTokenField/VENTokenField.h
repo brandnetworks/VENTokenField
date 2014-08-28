@@ -44,6 +44,9 @@
 - (BOOL)tokenFieldShouldPresentSuggestions:(VENTokenField *)tokenField;
 - (NSInteger)tokenField:(VENTokenField *)tokenField numberOfSuggestionsForPartialText:(NSString *)text;
 - (NSString *)tokenField:(VENTokenField *)tokenField suggestionTitleForPartialText:(NSString *)text atIndex:(NSInteger)index;
+- (void)tokenField:(VENTokenField *)tokenField willShowCell:(UITableViewCell *)cell forIndex:(NSInteger)index;
+- (CGFloat)tokenField:(VENTokenField *)tokenField heightForCellAtIndex:(NSInteger)index;
+
 @end
 
 
@@ -71,13 +74,15 @@
 
 @property (assign, nonatomic) UIKeyboardType inputTextFieldKeyboardType;
 @property (strong, nonatomic) UIColor *toLabelTextColor;
+@property (strong, nonatomic) NSString *toLabelText;
 @property (strong, nonatomic) UIColor *inputTextFieldTextColor;
 
 @property (strong, nonatomic) UILabel *toLabel;
 
 @property (copy, nonatomic) NSString *placeholderText;
 
-- (void)setColorScheme:(UIColor *)color;
+- (void) setColorScheme:(UIColor *)color DEPRECATED_ATTRIBUTE;
+- (void) registerCellNibForSuggestionsTableView:(UINib *)nib;
 
 @end
 
